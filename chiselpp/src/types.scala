@@ -16,7 +16,7 @@ sealed class UInt(width: Width) extends Bits(width):
 
 object UInt:
   def apply(width: Width): UInt = new UInt(width)
-  def apply(value: Int, width: Width): Literal[UInt] = new Literal(value, new UInt(width))
+// def apply(value: Int, width: Width): Literal[UInt] = new Literal(value, new UInt(width))
 
 sealed class Clock extends Bits(Width(1))
 
@@ -31,4 +31,4 @@ object Reset:
 // Add some syntatic sugar using implicit conversions
 extension(value: Int)
   def W: Width = Width(value)
-  def U(w: Width) = Literal(value, UInt(w))
+// def U(w: Width) = Literal(value, UInt(w))
