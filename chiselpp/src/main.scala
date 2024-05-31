@@ -16,9 +16,9 @@ object Main:
     val reg = Reg(UInt(4.W))
     println(s"reg ${reg}")
 
-    val mod = module {
+    val mod = Module {
       val n1 = 0.U(32.W)
       val n2 = 2.U(4.W)
-      val n3 = n1.add(n2)
+      val n3 = n1 + n2
     }
     println(mod)

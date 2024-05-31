@@ -1,5 +1,4 @@
 package chiselpp
-import scala.collection.mutable.ArrayBuffer
 
 sealed class Width(val value: Int):
   override def toString: String = s"${value}"
@@ -9,23 +8,11 @@ object Width:
 
 sealed abstract class HWType
 
-// For the IR to be a graph rep, we want the elaborated in memory
-// representation of the frontend to be also a graph
-abstract class HWNode
-
 sealed abstract class Bits(val width: Width) extends HWType:
   override def toString: String = s"Bits ${width}"
 
 sealed class UInt(width: Width) extends Bits(width):
   override def toString: String = s"UInt ${width}"
-
-sealed class Literal[T <: HWType](val value: Int, val hwtype: HWType) extends HWNode:
-  override def toString: String = s"Literal ${value} ${hwtype}"
-
-  def add(b: HWNode)(implicit builder: Module): HWNode =
-    builder.add(this)
-    builder.add(b)
-    this
 
 object UInt:
   def apply(width: Width): UInt = new UInt(width)
@@ -45,23 +32,3 @@ object Reset:
 extension(value: Int)
   def W: Width = Width(value)
   def U(w: Width) = Literal(value, UInt(w))
-
-sealed class Wire[T <: HWType](val data: HWType) extends HWNode
-
-object Wire:
-  def apply[T <: HWType](data: HWType) = new Wire(data)
-
-sealed class Reg[T <: HWType](val data: HWType) extends HWNode
-
-object Reg:
-  def apply[T <: HWType](data: HWType) = new Reg(data)
-
-class Module:
-  val nodes = new ArrayBuffer[HWNode]
-  def add(n: HWNode): Unit = nodes += n
-  override def toString = nodes.map(_.toString).foldLeft("")(_ + "\n" + _)
-
-def module(init: Module ?=> Unit) =
-  given m: Module = new Module()
-  init
-  m
