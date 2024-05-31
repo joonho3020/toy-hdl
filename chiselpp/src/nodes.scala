@@ -32,9 +32,7 @@ sealed abstract trait HasOperation:
 
 sealed class Literal[T <: HWType](val value: Int, val hwtype: HWType)
     extends HWNode with HasOperation:
-
   def cloneType: Literal[T] = new Literal(value, hwtype)
-
   override def toString: String = s"Literal ${value} ${hwtype}"
 
 sealed class Wire[T <: HWType](val data: HWType) extends HWNode:
@@ -58,3 +56,7 @@ object Module:
     given m: Module = new Module()
     init
     m
+
+object InModuleBody:
+  def apply(init: Module ?=> HWNode)(using m: Module) =
+    init
