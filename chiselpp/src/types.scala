@@ -42,7 +42,7 @@ object Reset:
   def apply: Reset = new Reset
 
 // Add some syntatic sugar using implicit conversions
-implicit class IntConversions(value: Int) extends AnyVal:
+extension(value: Int)
   def W: Width = Width(value)
   def U(w: Width) = Literal(value, UInt(w))
 
